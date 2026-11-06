@@ -2,7 +2,8 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 """BTK Tools for Bonsai.
 
-Release 0.1.0: intersection snap (key S) and dimension chain from snapped points.
+Drafting: intersection snap (key S) and dimension chain from snapped points.
+Site: terrain, cardboard contour model, trees, meadow, surroundings and cameras from geodata.
 Bonsai must be installed and enabled. The tools are in the sidebar of the 3D view,
 tab BTK.
 """
@@ -11,7 +12,7 @@ import importlib
 import bpy
 
 # Modules that import Bonsai; registered once Bonsai is available.
-_TOOL_MODULES = ("snap", "dimension", "ui")
+_TOOL_MODULES = ("snap", "dimension", "ui", "site")
 _registered = []
 _attempts = 0
 

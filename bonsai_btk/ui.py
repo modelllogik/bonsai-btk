@@ -10,6 +10,7 @@ class BONSAI_BTK_PT_dimensions(bpy.types.Panel):
     bl_space_type = "VIEW_3D"
     bl_region_type = "UI"
     bl_category = "BTK"
+    bl_order = 0
 
     def draw(self, context):
         col = self.layout.column(align=True)
