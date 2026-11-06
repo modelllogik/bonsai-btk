@@ -1,0 +1,10 @@
+* text=auto eol=lf
+
+*.svg text eol=lf
+*.toml text eol=lf
+
+*.blend binary
+*.pdf binary
+*.png binary
+*.gif binary
+*.zip binary

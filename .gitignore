@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Blender
+*.blend1
+*.blend2
+
+# Built extension
+dist/
+*.zip
+
+# Geodata and test models are not checked in (large, reloadable)
+*.tif
+*.tiff
+*.gpkg
+*.gml
+*.blend
+*.ifc
+
+# OS / editor
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/

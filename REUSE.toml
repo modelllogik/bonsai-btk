@@ -1,0 +1,23 @@
+version = 1
+
+# Code and the extension manifest: GPL-3.0-or-later.
+[[annotations]]
+path = ["**/*.py", "bonsai_btk/blender_manifest.toml"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2026 Andràs Marghescu and contributors"
+SPDX-License-Identifier = "GPL-3.0-or-later"
+
+# Documentation and project files: CC BY 4.0.
+[[annotations]]
+path = [
+  "docs/**",
+  "README.md",
+  "CONTRIBUTING.md",
+  "REUSE.toml",
+  ".gitignore",
+  ".gitattributes",
+  "**/.gitkeep",
+]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2026 Andràs Marghescu and contributors"
+SPDX-License-Identifier = "CC-BY-4.0"

@@ -1,0 +1,15 @@
+schema_version = "1.0.0"
+
+id = "bonsai_btk"
+version = "0.0.1"
+name = "BTK Tools for Bonsai"
+tagline = "Drafting and site tools for Bonsai, made for vocational training"
+maintainer = "Andràs Marghescu"
+type = "add-on"
+website = "https://github.com/modelllogik/bonsai-btk"
+
+blender_version_min = "4.2.0"
+
+license = ["SPDX:GPL-3.0-or-later"]
+
+tags = ["3D View", "Object"]
