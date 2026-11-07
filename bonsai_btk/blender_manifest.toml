@@ -1,7 +1,7 @@
 schema_version = "1.0.0"
 
 id = "bonsai_btk"
-version = "0.2.0"
+version = "0.2.1"
 name = "BTK Tools for Bonsai"
 tagline = "Drafting and site tools for Bonsai, made for vocational training"
 maintainer = "Andràs Marghescu"

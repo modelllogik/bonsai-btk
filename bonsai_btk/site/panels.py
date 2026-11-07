@@ -162,6 +162,7 @@ class BONSAI_BTK_PT_site_origin(_Step, bpy.types.Panel):
         col.prop(g, "origin_e", text="E")
         col.prop(g, "origin_n", text="N")
         col.prop(g, "origin_h", text="H ±0.00")
+        col.prop(g, "vertical_datum", text="H Datum")
         col = lay.column(align=True)
         col.prop(g, "x_axis_abscissa")
         col.prop(g, "x_axis_ordinate")

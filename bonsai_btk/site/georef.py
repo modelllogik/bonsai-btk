@@ -276,6 +276,27 @@ def mirror_check(scene):
     return ga, go, iv[0], iv[1], ok
 
 
+def datum_code(text):
+    """Normalise a vertical datum entry: '7837' → 'EPSG:7837'; empty stays empty."""
+    t = (text or "").strip()
+    if t.isdigit():
+        return f"EPSG:{t}"
+    if t.lower().startswith("epsg:"):
+        return "EPSG:" + t[5:].strip()
+    return t
+
+
+def ifc_vertical_datum():
+    """VerticalDatum of the IfcProjectedCRS in the loaded IFC, or ''."""
+    ifc = _ifc()
+    if ifc is None:
+        return ""
+    for crs in ifc.by_type("IfcProjectedCRS"):
+        if getattr(crs, "VerticalDatum", None):
+            return str(crs.VerticalDatum)
+    return ""
+
+
 def read_ifc(context):
     """Values from the IfcMapConversion of the loaded IFC: ((E, N, H, a, o), warnings)."""
     import ifcopenshell.util.geolocation as G
@@ -334,7 +355,11 @@ def write_ifc(context):
     if metre is None:
         metre = ifc.createIfcSIUnit(None, "LENGTHUNIT", None, "METRE")
     ps = _unit_scale(None, ifc)          # project unit → m
-    AG.edit_georeferencing(ifc, projected_crs={"Name": f"EPSG:{epsg}", "MapUnit": metre},
+    crs_attrs = {"Name": f"EPSG:{epsg}", "MapUnit": metre}
+    vd = datum_code(context.scene.bonsai_btk_site.vertical_datum)
+    if vd:
+        crs_attrs["VerticalDatum"] = vd
+    AG.edit_georeferencing(ifc, projected_crs=crs_attrs,
                            coordinate_operation={"Eastings": e0, "Northings": n0, "OrthogonalHeight": h0,
                                                  "XAxisAbscissa": a, "XAxisOrdinate": o, "Scale": ps})
     nd = north(context.scene)
@@ -383,6 +408,11 @@ class BONSAI_BTK_OT_site_origin_from_ifc(bpy.types.Operator):
             vec = (old[3], old[4])
             g.info_text = "Rotation only in the add-on – not yet in the IFC"
         _set(context, v[0], v[1], v[2], vec)
+        vd = ifc_vertical_datum()
+        if vd:
+            g.vertical_datum = vd
+        else:
+            warn.append("IFC without vertical datum – the height has no reference")
         msg = f"E {v[0]:.3f}  N {v[1]:.3f}  H {v[2]:.3f}  " + _vtext(*vec)
         self.report({'WARNING'} if warn else {'INFO'}, msg + (" – " + " | ".join(warn) if warn else ""))
         return {'FINISHED'}
@@ -392,7 +422,8 @@ class BONSAI_BTK_OT_site_origin_to_ifc(bpy.types.Operator):
     bl_idname = "bonsai_btk.site_origin_to_ifc"
     bl_label = "To IFC"
     bl_description = ("Write the project origin and rotation (abscissa/ordinate) as georeference into the loaded IFC "
-                      "(IfcMapConversion with the EPSG code of the terrain, MapUnit metre, Scale; plus true north). "
+                      "(IfcMapConversion with the EPSG code of the terrain, MapUnit metre, Scale, vertical datum; "
+                      "plus true north). "
                       "Save the IFC in Bonsai afterwards")
     bl_options = {'REGISTER', 'UNDO'}
 
@@ -406,8 +437,11 @@ class BONSAI_BTK_OT_site_origin_to_ifc(bpy.types.Operator):
             self.report({'ERROR'}, str(ex))
             return {'CANCELLED'}
         context.scene.bonsai_btk_site.info_text = "Georeference written to the IFC – save the IFC!"
-        self.report({'INFO'}, f"To IFC: E {v[0]:.3f} N {v[1]:.3f} H {v[2]:.3f}  " + _vtext(v[3], v[4])
-                    + " – save the IFC!")
+        msg = f"To IFC: E {v[0]:.3f} N {v[1]:.3f} H {v[2]:.3f}  " + _vtext(v[3], v[4]) + " – save the IFC!"
+        if ifc_vertical_datum():
+            self.report({'INFO'}, msg)
+        else:
+            self.report({'WARNING'}, msg + " | No vertical datum – enter one under H Datum")
         return {'FINISHED'}
 
 

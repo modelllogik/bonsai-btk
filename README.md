@@ -80,7 +80,8 @@ steps in the order you work; each header shows a tick once the step is done, the
 settings fold away under *Settings*.
 
 1. **Project Origin:** easting, northing, height and the rotation as abscissa/ordinate,
-   read from or written to the IfcMapConversion of the IFC (with true north). Once the
+   read from or written to the IfcMapConversion of the IFC (with true north and the
+   vertical datum of the heights, e.g. EPSG:7837 in Germany). Once the
    terrain is built, a mirror check compares its rotation with the one in the IFC.
 2. **Terrain:** a digital terrain model (GeoTIFF, Float32) becomes a mesh, optionally with
    the orthophoto on it. The coordinate reference system is read from the file.
@@ -118,6 +119,7 @@ they are – the shift onto the layer is for the view only. Move the house in *T
 |---|---|
 | 0.1.0 | **Intersection snap** (key S, two edges, tracking lines like in CAD) and **dimension chain** |
 | 0.2.0 | **Site tools:** terrain and orthophoto from GeoTIFF, cardboard contour model, trees, meadow, LoD2 surroundings, cameras, project origin and georeference with the mirror check, terrain as IFC element |
+| 0.2.1 | **Vertical datum:** *To IFC* writes it to IfcProjectedCRS.VerticalDatum, *From IFC* reads it; a warning when it is missing |
 | later | Hatching as real lines and dimension figures in German notation (post-processing of drawings), level markers, roof pitch |
 
 The site tools read the coordinate reference system from the data. Terrain, orthophoto

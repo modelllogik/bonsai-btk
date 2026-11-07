@@ -54,7 +54,12 @@ class BONSAI_BTK_SiteProperties(bpy.types.PropertyGroup):
     origin_n: StringProperty(name="Northing N", default="", update=_upd_origin,
                              description="Northing of the project origin in m (e.g. 5294662.500)")
     origin_h: FloatProperty(name="Height ±0.00", default=0.0, precision=3, update=_upd_origin, unit='LENGTH',
-                            description="Orthometric height of ±0.00 (IfcMapConversion.OrthogonalHeight)")
+                            description=("Height of ±0.00 in the vertical datum below "
+                                         "(IfcMapConversion.OrthogonalHeight)"))
+    vertical_datum: StringProperty(name="Vertical Datum", default="",
+                                   description=("Vertical datum of the heights as EPSG code, written to "
+                                                "IfcProjectedCRS.VerticalDatum (e.g. EPSG:7837 for DHHN2016 in Germany). "
+                                                "Empty: To IFC leaves the value in the IFC as it is"))
     x_axis_abscissa: StringProperty(name="Abscissa", default="1.0", update=_upd_origin,
                                     description=("XAxisAbscissa: east component of the project x axis in map axes. "
                                                  "Tells how much it is rotated (not rotated: 1)"))

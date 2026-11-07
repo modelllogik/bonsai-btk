@@ -1,6 +1,6 @@
 # Anleitung für Ausbilder
 
-*Deutsche Anleitung zu `bonsai-btk`. Stand: 0.2.0.*
+*Deutsche Anleitung zu `bonsai-btk`. Stand: 0.2.1.*
 
 ## Worum es geht
 
@@ -49,7 +49,7 @@ Oben im Kasten *Site* schaltet man zwischen *Terrain* und *Cardboard Model* um, 
 
 ### Die sieben Schritte
 
-1. **Project Origin:** Rechtswert, Hochwert und Höhe ±0,00 des Projekts, dazu die Drehung als Abszisse und Ordinate, so wie sie in der IfcMapConversion steht. *From IFC* übernimmt die Werte aus der geladenen IFC, *To IFC* schreibt sie hinein, mit True North. Der Knopf mit dem Fadenkreuz legt den Nullpunkt auf den 3D-Cursor. Sobald das Gelände steht, zeigt die **Spiegelprobe**, ob seine Drehung zur Drehung in der IFC passt. Unter *Check Values and North* stehen die Prüfwerte, die Meridiankonvergenz und der Knopf für das Add-on *Sun Position*.
+1. **Project Origin:** Rechtswert, Hochwert und Höhe ±0,00 des Projekts, dazu die Drehung als Abszisse und Ordinate, so wie sie in der IfcMapConversion steht. Unter *H Datum* steht der Höhenbezug als EPSG-Code, in Deutschland `EPSG:7837` für DHHN2016; er geht als VerticalDatum in die IFC. *From IFC* übernimmt die Werte aus der geladenen IFC, *To IFC* schreibt sie hinein, mit True North. Der Knopf mit dem Fadenkreuz legt den Nullpunkt auf den 3D-Cursor. Sobald das Gelände steht, zeigt die **Spiegelprobe**, ob seine Drehung zur Drehung in der IFC passt. Unter *Check Values and North* stehen die Prüfwerte, die Meridiankonvergenz und der Knopf für das Add-on *Sun Position*.
 2. **Terrain:** Bei *Terrain* das DGM wählen, bei *Orthophoto* das Luftbild, dann *Load Terrain*. Das Gelände erscheint mit Luftbild, dazu kommen Sonne und Himmel.
 3. **Buildings:** Hier erfährt das Werkzeug, wo das eigene Haus steht. Die Bauteile des IFC-Hauses auswählen und *Selection as Building* drücken. Davon hängt dreierlei ab: Bäume und Wiese unter dem Haus verschwinden, im Pappmodell steht das Haus auf seiner Schicht, und die Kameras in Schritt 6 richten sich auf das Haus aus. Gelände, Grundstück und andere Geländeelemente zählen nie als Gebäude, auch wenn sie mit ausgewählt sind; der Knopf meldet, wie viele er weggelassen hat. Darunter lädt man unter *Surroundings (LoD2)* die Nachbargebäude aus einer CityGML-Datei. Gebäude, die das eigene Haus berühren (etwa der Altbestand auf dem Grundstück), werden ausgeblendet.
 4. **Vegetation:** Bäume aus dem GeoPackage der Einzelbäume (schnell) oder aus einem Oberflächenmodell (nDOM/DOM, langsam). Im Gelände erscheinen Fichten, Laubbäume und Büsche, im Pappmodell Modellbaum-Kegel. Eigene Baummodelle legt man in die Sammlungen unter *BTK_Site_Tree_Species*. Darunter die Wiese: Gras und Steine nach den Farben des Luftbilds, dicht nahe der aktiven Kamera und weiter weg dünner. In der Ansicht erscheint nur ein Zehntel davon, damit Blender flüssig bleibt.
