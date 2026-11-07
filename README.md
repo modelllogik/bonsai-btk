@@ -5,8 +5,8 @@
 *BTK stands for* Bautechnischer Konstrukteur *(building design technician), a German
 vocational training. Modelllogik is German for model logic.*
 
-> **Status:** [0.1.0](https://github.com/modelllogik/bonsai-btk/releases/tag/v0.1.0) brings the
-> drafting tools. 0.2.0 with the site tools is in preparation. See [Roadmap](#roadmap).
+> **Status:** [0.2.0](https://github.com/modelllogik/bonsai-btk/releases/tag/v0.2.0) adds the
+> site tools to the drafting tools of 0.1.0. See [Roadmap](#roadmap).
 
 ## Why
 
@@ -62,6 +62,12 @@ Reverses the point order of the selected chains, so the figures turn with it. Af
 DIN 1356 a chain reads left to right or bottom to top.
 
 ### Site
+
+![The Watzmann massif turning into a cardboard model](https://github.com/modelllogik/bonsai-btk/releases/download/v0.2.0/bonsai-btk-0.2.0.gif)
+
+*Watzmann massif, 2 × 2 km at 1 m, 136 layers of 10 m. Geodata: Bayerische
+Vermessungsverwaltung – [geodaten.bayern.de](https://geodaten.bayern.de) (CC BY 4.0);
+colours from height and slope.*
 
 The site tools build the surroundings of a building from official open geodata, for
 teaching and for presentation: from the real terrain to a cardboard model on the table.

@@ -1,6 +1,6 @@
 # Anleitung für Ausbilder
 
-*Deutsche Anleitung zu `bonsai-btk`. Stand: 0.2.0 in Vorbereitung.*
+*Deutsche Anleitung zu `bonsai-btk`. Stand: 0.2.0.*
 
 ## Worum es geht
 
