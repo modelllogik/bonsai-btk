@@ -15,6 +15,10 @@ Projektvorlage und Zeichenstil liegen im Schwester-Repository [native-ifc-templa
 Sie ist gelungen, wenn Sie ein Werkzeug **ohne Rückfrage** im Unterricht einsetzen können.
 Wenn das nicht klappt, ist die Anleitung unvollständig. Bitte melden Sie die Stelle als Issue, gern auf Deutsch.
 
+## Vorher: Blender und Bonsai
+
+Das Add-on läuft in Blender und setzt Bonsai voraus. Wer beides noch nicht kennt oder installiert hat, beginnt mit Abschnitt 0 der Anleitung zur Projektvorlage: [Vorbereitung: Blender und Bonsai](https://github.com/modelllogik/native-ifc-template/blob/main/docs/de/README.md#0--vorbereitung-blender-und-bonsai). Dort stehen Download, Installation, die Prüfung und die ersten Handgriffe in Blender.
+
 ## Installieren und aktualisieren
 
 Das Add-on kommt aus einem eigenen Erweiterungs-Repository. Die Adresse trägt man einmal ein, danach installiert und aktualisiert Blender es wie jede andere Erweiterung.
