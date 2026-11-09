@@ -5,8 +5,9 @@
 *BTK stands for* Bautechnischer Konstrukteur *(building design technician), a German
 vocational training. Modelllogik is German for model logic.*
 
-> **Status:** [0.2.0](https://github.com/modelllogik/bonsai-btk/releases/tag/v0.2.0) adds the
-> site tools to the drafting tools of 0.1.0. See [Roadmap](#roadmap).
+> **Status:** [0.2.1](https://github.com/modelllogik/bonsai-btk/releases/tag/v0.2.1) writes the
+> vertical datum to the IFC; 0.2.0 added the site tools to the drafting tools of 0.1.0.
+> See [Roadmap](#roadmap).
 
 ## Why
 
@@ -133,17 +134,43 @@ Open geodata for Bavaria (CC BY 4.0, source: Bayerische Vermessungsverwaltung �
 tools read one GeoTIFF per layer, so several tiles are merged into one file first, with
 QGIS or GDAL for example.
 
-## Install
+## Install and update
 
-Download the zip from the [latest release](https://github.com/modelllogik/bonsai-btk/releases/latest), then in Blender
-*Edit → Preferences → Get Extensions → ⌄ → Install from Disk…* and choose the repository
-**User Default**. Bonsai must be installed and enabled.
+The add-on comes from its own extension repository. You add the address once; after that
+Blender installs and updates it like any other extension.
+
+1. *Edit → Preferences → System → Network:* tick **Allow Online Access**.
+2. *Edit → Preferences → Get Extensions → Repositories* (top right) → **+** →
+   **Add Remote Repository**, with this URL:
+
+   ```
+   https://github.com/modelllogik/bonsai-btk/releases/latest/download/index.json
+   ```
+
+   Tick *Check for Updates on Startup* if you like.
+3. Search for **BTK Tools for Bonsai** in *Get Extensions* and press *Install*.
+   Bonsai must be installed and enabled.
+
+**Update:** when a new release is out, *Get Extensions* shows an *Update* button (after
+*Check for Updates* in the ⌄ menu, or at start-up). Do not uninstall the old version first.
+
+**Coming from *Install from Disk*?** If you installed an earlier version from a zip, it sits
+in the repository *User Default*. Uninstall it there once, **restart Blender**, then install
+from the new repository as above. Two copies of the same extension in two repositories get
+in each other's way.
+
+**Without online access** (for example in a closed network): download the zip from the
+[latest release](https://github.com/modelllogik/bonsai-btk/releases/latest) and use
+*Get Extensions → ⌄ → Install from Disk…*. To update, install the newer zip into the
+**same** repository and restart Blender; you then have to watch for new releases yourself.
 
 ## Building the extension yourself
 
 ```bash
 blender --command extension build --source-dir bonsai_btk --output-dir dist
 ```
+
+How a release and its `index.json` are made is described in [RELEASING.md](RELEASING.md).
 
 The geometry that runs without Blender has tests:
 

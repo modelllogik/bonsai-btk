@@ -15,6 +15,26 @@ Projektvorlage und Zeichenstil liegen im Schwester-Repository [native-ifc-templa
 Sie ist gelungen, wenn Sie ein Werkzeug **ohne Rückfrage** im Unterricht einsetzen können.
 Wenn das nicht klappt, ist die Anleitung unvollständig. Bitte melden Sie die Stelle als Issue, gern auf Deutsch.
 
+## Installieren und aktualisieren
+
+Das Add-on kommt aus einem eigenen Erweiterungs-Repository. Die Adresse trägt man einmal ein, danach installiert und aktualisiert Blender es wie jede andere Erweiterung.
+
+1. *Edit → Preferences → System → Network:* **Allow Online Access** einschalten.
+2. *Edit → Preferences → Get Extensions → Repositories* (oben rechts) → **+** → **Add Remote Repository**, mit dieser Adresse:
+
+   ```
+   https://github.com/modelllogik/bonsai-btk/releases/latest/download/index.json
+   ```
+
+   Wer möchte, setzt das Häkchen bei *Check for Updates on Startup*.
+3. In *Get Extensions* nach **BTK Tools for Bonsai** suchen und *Install* drücken. Bonsai muss installiert und eingeschaltet sein.
+
+**Aktualisieren:** Gibt es eine neue Fassung, zeigt *Get Extensions* einen Knopf *Update* (nach *Check for Updates* im Menü ⌄ oder beim Start). Die alte Fassung vorher **nicht** deinstallieren.
+
+**Bisher über *Install from Disk* installiert?** Dann liegt die alte Fassung im Repository *User Default*. Sie dort einmal deinstallieren, **Blender neu starten** und dann wie oben aus dem neuen Repository installieren. Zwei Kopien derselben Erweiterung in zwei Repositorys kommen sich in die Quere.
+
+**Ohne Internetzugang** (etwa in einem abgeschotteten Netz): die Zip aus dem [neuesten Release](https://github.com/modelllogik/bonsai-btk/releases/latest) laden und über *Get Extensions → ⌄ → Install from Disk…* installieren. Eine neuere Zip ins **selbe** Repository installieren und Blender neu starten. Auf neue Fassungen muss man dann selbst achten.
+
 ## Die Werkzeuge
 
 Alle Werkzeuge liegen in der Seitenleiste des 3D-Fensters (Taste N), Reiter **BTK**: im Kasten *Dimensions* das Zeichnen, im Kasten *Site* das Gelände.
