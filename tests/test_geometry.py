@@ -7,15 +7,26 @@
 import importlib.util
 import math
 import os
+import sys
 import unittest
 
 ROOT = os.path.join(os.path.dirname(__file__), "..", "bonsai_btk")
 
 
 def _load(name):
+    """Load a module on its own, without its Blender part: inside Blender (tests run from
+    its Python console) bpy is hidden while loading, so the module takes its plain branch."""
     spec = importlib.util.spec_from_file_location("btk_" + name, os.path.join(ROOT, name + ".py"))
     module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
+    saved = sys.modules.get("bpy", False)
+    sys.modules["bpy"] = None          # makes "import bpy" raise ImportError
+    try:
+        spec.loader.exec_module(module)
+    finally:
+        if saved is False:
+            del sys.modules["bpy"]
+        else:
+            sys.modules["bpy"] = saved
     return module
 
 

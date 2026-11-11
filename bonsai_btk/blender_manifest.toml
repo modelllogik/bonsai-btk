@@ -1,9 +1,9 @@
 schema_version = "1.0.0"
 
 id = "bonsai_btk"
-version = "0.2.1"
+version = "0.3.0"
 name = "BTK Tools for Bonsai"
-tagline = "Drafting and site tools for Bonsai, made for vocational training"
+tagline = "DIN drawings, drafting and site tools for Bonsai, for training"
 maintainer = "Andràs Marghescu"
 type = "add-on"
 website = "https://github.com/modelllogik/bonsai-btk"
@@ -13,3 +13,7 @@ blender_version_min = "4.2.0"
 license = ["SPDX:GPL-3.0-or-later"]
 
 tags = ["3D View", "Object"]
+
+[permissions]
+network = "Local browser preview of drawings and sheets (127.0.0.1)"
+files = "Drawings, sheets, layouts and PDFs of the IFC project"

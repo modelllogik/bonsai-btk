@@ -5,8 +5,11 @@
 *BTK stands for* Bautechnischer Konstrukteur *(building design technician), a German
 vocational training. Modelllogik is German for model logic.*
 
-> **Status:** [0.2.1](https://github.com/modelllogik/bonsai-btk/releases/tag/v0.2.1) writes the
-> vertical datum to the IFC; 0.2.0 added the site tools to the drafting tools of 0.1.0.
+> **Status:** 0.3.0 post-processes Bonsai's drawings after DIN 1356 (hatching as real
+> lines, merged joints, fine windows, stairs, roofs, sill heights), builds sheets with a
+> legend and a north arrow, prints them as PDF through Inkscape and shows drawings and
+> sheets in a browser preview, where a sheet can be arranged. 0.2.1 writes the vertical
+> datum to the IFC; 0.2.0 added the site tools to the drafting tools of 0.1.0.
 > See [Roadmap](#roadmap).
 
 ## Why
@@ -26,7 +29,7 @@ which provides the IFC project template and the drawing style.
 ## Tools
 
 All tools are in the sidebar of the 3D view (key N), tab **BTK**: panel **Dimensions** for
-drafting, panel **Site** for the terrain.
+drafting, panel **Drawing** for drawings and sheets, panel **Site** for the terrain.
 
 ### Drafting
 
@@ -61,6 +64,56 @@ meets the outer face of the roof. *Backspace* removes the first edge, *S* switch
 
 Reverses the point order of the selected chains, so the figures turn with it. After
 DIN 1356 a chain reads left to right or bottom to top.
+
+### Drawing
+
+Bonsai writes a drawing as an SVG file. The buttons in the panel **Drawing** post-process
+that file after DIN 1356-1, build sheets from it and print them. They need the drawing
+style of [native-ifc-template](https://github.com/modelllogik/native-ifc-template)
+(`din.css` and `din-patterns.svg`, installed with its `scripts/install_style.py`). Its
+[example house](https://github.com/modelllogik/native-ifc-template/tree/main/examples)
+carries a drawing set to try them on.
+
+**Update Drawing** runs Bonsai's *Create Drawing* for the active drawing, then the
+post-processing:
+
+- **Hatching as real lines** instead of SVG patterns, clipped to the cut area, so that a
+  PDF keeps them as vectors; the timber cross; per element the hatching can be turned.
+- **Joints of the same material merged:** where two walls of the same masonry meet, the
+  line between them goes; structural layers are drawn last, so that their outline stays
+  on top.
+- **Layered elements as one area** from 1:100; per element this can be switched.
+- **Windows and doors** in the narrow line, the glass as one line.
+- **Stairs in plans:** the flight solid up to the cut line, dashed beyond it, the walking
+  line with circle and arrow, the rise and going on the floor where the stair starts.
+- **Roofs in plans:** outline and ridge of the roof above, dotted.
+- **Sill heights** (BRH) at the windows of a plan.
+
+Running it again changes nothing. Two buttons set properties of the selected elements and
+update the drawing at once: **Layers On/Off** draws them with their layers or as one area in
+every scale (*Ctrl*: back to automatic), stored as `EPset_BTK_Hatching.Layers`; **Rotate**
+turns their hatching by 15°, stored as `EPset_BTK_Hatching.Rotation`. Both stay in the IFC.
+
+**Update Sheet** does the same for every drawing on the sheet selected in Bonsai's sheet
+list, puts a legend of the cut materials (left of the title block; each box as the
+material is drawn, so a steel profile black and a steel sheet outlined) and, on plan
+sheets, a north arrow into the layout and builds the sheet with Bonsai's *Create Sheets*. If the
+layout file is missing, Bonsai writes it anew from the IFC once the drawings exist.
+
+**Print Sheet (PDF)** writes the selected sheet as PDF through
+[Inkscape](https://inkscape.org), to a file you choose; by default it updates the sheet
+first. Browsers rasterise hatching when they print, Inkscape keeps it as lines. The add-on
+looks for Inkscape on the path and in the usual install folders; its path can be set in the
+add-on preferences.
+
+**Preview Drawing** and **Preview Sheet** update the drawing or sheet and show it in the web
+browser; the page reloads by itself after every later update. On the sheet page the
+drawings, their view titles, the legend and the north arrow can be dragged (5 mm grid,
+*Alt* = free, two guide lines to snap to, arrow keys). *Apply* writes the new positions to
+the layout of the sheet, keeps a backup of the old one in `layouts/_backup/` (the latest
+five per sheet) and builds the sheet again; nothing in the IFC changes. The preview server
+listens on 127.0.0.1 only, on port 8765 (add-on preferences), and ends with
+**Stop Preview** or when the add-on is switched off.
 
 ### Site
 
@@ -106,6 +159,20 @@ settings fold away under *Settings*.
 Saving the IFC while the cardboard model is shown keeps the placements of the house as
 they are – the shift onto the layer is for the view only. Move the house in *Terrain*.
 
+## Known limitations
+
+- **Walls with layer priorities** at their connections (for example masonry butt-jointed at
+  the corners, insulation wrapping round) cannot be regenerated by IfcOpenShell 0.9
+  ([#10054](https://github.com/IfcOpenShell/IfcOpenShell/issues/10054), fix proposed in
+  [PR #10071](https://github.com/IfcOpenShell/IfcOpenShell/pull/10071)). Moving or editing
+  such a wall in Bonsai fails until the fix is released. Drawing them is not affected; the
+  add-on does not patch this.
+- **Inkscape** is needed for *Print Sheet (PDF)* and for *PDF* on the preview page; it is
+  not part of the add-on.
+- The post-processing reads the classes Bonsai writes into the SVG. A later Bonsai that
+  writes them differently may need an update of the add-on; the tested versions are named
+  in each release.
+
 ## Principles
 
 - **Few runtime patches.** The tools use Bonsai's API and operators. Where Bonsai has to
@@ -121,7 +188,8 @@ they are – the shift onto the layer is for the view only. Move the house in *T
 | 0.1.0 | **Intersection snap** (key S, two edges, tracking lines like in CAD) and **dimension chain** |
 | 0.2.0 | **Site tools:** terrain and orthophoto from GeoTIFF, cardboard contour model, trees, meadow, LoD2 surroundings, cameras, project origin and georeference with the mirror check, terrain as IFC element |
 | 0.2.1 | **Vertical datum:** *To IFC* writes it to IfcProjectedCRS.VerticalDatum, *From IFC* reads it; a warning when it is missing |
-| later | Hatching as real lines and dimension figures in German notation (post-processing of drawings), level markers, roof pitch |
+| 0.3.0 | **Drawings after DIN 1356:** post-processing (hatching as real lines, joints, build-ups, windows, stairs, roofs, sill heights), sheets with legend and north arrow, PDF through Inkscape, browser preview with arranging a sheet |
+| later | Dimension figures in German notation, level markers, roof pitch, text size by scale, terrain line in sections |
 
 The site tools read the coordinate reference system from the data. Terrain, orthophoto
 and trees from a surface model work with any GeoTIFF in a projected, metric CRS (for
@@ -172,7 +240,7 @@ blender --command extension build --source-dir bonsai_btk --output-dir dist
 
 How a release and its `index.json` are made is described in [RELEASING.md](RELEASING.md).
 
-The geometry that runs without Blender has tests:
+The parts that run without Blender (geometry, post-processing, preview) have tests:
 
 ```bash
 python -m unittest discover -s tests

@@ -1,6 +1,6 @@
 # Anleitung für Ausbilder
 
-*Deutsche Anleitung zu `bonsai-btk`. Stand: 0.2.1.*
+*Deutsche Anleitung zu `bonsai-btk`. Stand: 0.3.0.*
 
 ## Worum es geht
 
@@ -41,7 +41,7 @@ Das Add-on kommt aus einem eigenen Erweiterungs-Repository. Die Adresse trägt m
 
 ## Die Werkzeuge
 
-Alle Werkzeuge liegen in der Seitenleiste des 3D-Fensters (Taste N), Reiter **BTK**: im Kasten *Dimensions* das Zeichnen, im Kasten *Site* das Gelände.
+Alle Werkzeuge liegen in der Seitenleiste des 3D-Fensters (Taste N), Reiter **BTK**: im Kasten *Dimensions* das Bemaßen, im Kasten *Drawing* Zeichnungen und Blätter, im Kasten *Site* das Gelände.
 
 Die Zeichenwerkzeuge arbeiten in einer aktiven Zeichnung im IFC Object Mode.
 
@@ -60,6 +60,60 @@ Beim Punktefangen schaltet *S* auf den Schnittpunkt zweier Kanten um: erste Kant
 ### Maß umdrehen: *Flip Dimension*
 
 Kehrt die Punktreihenfolge der gewählten Maßketten um, die Maßzahlen drehen sich mit. Nach DIN 1356 liest man waagerechte Ketten von links nach rechts und senkrechte von unten nach oben.
+
+## Zeichnungen und Blätter: Kasten *Drawing*
+
+Bonsai schreibt jede Zeichnung als SVG-Datei. Die Knöpfe im Kasten *Drawing* bearbeiten diese Datei nach DIN 1356-1 nach, bauen daraus Blätter und drucken sie. Voraussetzung ist der Zeichenstil aus [native-ifc-template](https://github.com/modelllogik/native-ifc-template), eingerichtet mit dessen `scripts/install_style.py`. Zum Ausprobieren eignet sich das Mustermodell dort (`examples/example_house.ifc`); es bringt 19 Zeichnungen und Blätter mit.
+
+### *Update Drawing*
+
+Erzeugt die aktive Zeichnung mit Bonsais *Create Drawing* und bearbeitet sie nach:
+- Schraffuren als echte Linien statt SVG-Muster, auf die Schnittfläche beschnitten. So bleiben sie im PDF Vektoren. Dazu das Holzkreuz.
+- Fugen gleichen Materials verschwinden, etwa zwischen zwei Mauerwerkswänden. Tragende Schichten liegen oben, damit ihr Umriss durchgeht.
+- Schichtaufbauten erscheinen ab 1:100 als eine Fläche.
+- Fenster und Türen in der schmalen Linie, das Glas als eine Linie.
+- Treppen im Grundriss: Der Lauf bis zur Schnittlinie durchgezogen, darüber gestrichelt, Lauflinie mit Kreis und Pfeil, Steigungsangabe im Geschoss des Antritts.
+- Dachumriss und First im Grundriss gepunktet.
+- Brüstungshöhen (BRH) an den Fenstern im Grundriss.
+
+Ein zweiter Lauf ändert nichts mehr.
+
+### *Layers On/Off* und *Rotate*
+
+Beide wirken auf die gewählten Bauteile und erneuern danach die Zeichnung:
+- *Layers On/Off* zeichnet sie in jedem Maßstab mit Schichten oder als eine Fläche. Mit *Strg* zurück auf automatisch.
+- *Rotate* dreht ihre Schraffur um 15°.
+
+Beides steht als Eigenschaft in der IFC (`EPset_BTK_Hatching.Layers`, `EPset_BTK_Hatching.Rotation`) und bleibt damit erhalten.
+
+### *Update Sheet* und *Print Sheet (PDF)*
+
+*Update Sheet* nimmt das Blatt, das in Bonsais Blattliste gewählt ist:
+1. Es erzeugt und bearbeitet jede Zeichnung darauf.
+2. Es setzt eine Legende der geschnittenen Materialien links neben den Plankopf, auf Grundriss-Blättern zusätzlich den Nordpfeil. Jedes Kästchen zeigt das Material so, wie es gezeichnet ist: ein Stahlprofil schwarz, ein Blech nur umrandet. Kommt beides vor, ist das Kästchen schwarz.
+3. Bonsai baut das Blatt.
+
+Fehlt die Layout-Datei des Blatts, wie beim frisch geöffneten Mustermodell, legt Bonsai sie an, sobald die Zeichnungen erzeugt sind.
+
+*Print Sheet (PDF)* speichert das gewählte Blatt als PDF, über [Inkscape](https://inkscape.org). Vorher wird das Blatt aktualisiert, das lässt sich im Dialog abwählen. Der Weg über Inkscape ist nötig, weil Browser Schraffuren beim Drucken in Pixel umwandeln. Inkscape muss installiert sein. Das Add-on sucht es selbst; findet es Inkscape nicht, trägt man den Pfad in den Einstellungen des Add-ons ein (*Edit → Preferences → Add-ons → BTK Tools for Bonsai*).
+
+### Vorschau im Browser
+
+*Preview Drawing* und *Preview Sheet* aktualisieren die Zeichnung bzw. das Blatt und zeigen es im Browser. Die Seite lädt sich nach jedem weiteren Update selbst neu.
+
+Auf der Blattseite lassen sich Zeichnung, Titel, Legende und Nordpfeil verschieben:
+- Ziehen am blauen Rahmen bewegt die Zeichnung samt Titel, Ziehen am Titelrahmen nur den Titel.
+- Raster 5 mm, mit *Alt* frei; die Pfeiltasten verschieben um 5 mm, mit *Alt* um 1 mm.
+- Zwei Hilfslinien (magenta) fangen an Kanten der Zeichnungen. Sie gibt es nur im Browser.
+- Mausrad = Zoom, Doppelklick = ganzes Blatt.
+
+*Apply* schreibt die neuen Lagen in die Layout-Datei des Blatts und baut es neu. Die vorige Fassung liegt danach in `layouts/_backup/`, je Blatt die letzten fünf. *Discard* verwirft die Änderungen. An der IFC ändert sich dabei nichts. *Print* öffnet eine Druckseite im Blattformat zum Ansehen, *PDF* das Blatt über Inkscape für den richtigen Druck.
+
+Der Vorschau-Server ist nur auf dem eigenen Rechner erreichbar (127.0.0.1), Port 8765. Ist der Port belegt, stellt man in den Einstellungen des Add-ons einen anderen ein. *Stop Preview* (das Kreuz neben der Adresse) beendet den Server.
+
+### Bekannte Einschränkung
+
+Wände mit Schichtvorrang an ihren Anschlüssen kann IfcOpenShell 0.9 nicht neu berechnen ([#10054](https://github.com/IfcOpenShell/IfcOpenShell/issues/10054)). Das betrifft etwa die Außenwände des Mustermodells: Mauerwerk stumpf gestoßen, WDVS herumgeführt. Wer eine solche Wand in Bonsai verschiebt oder ändert, bekommt eine Fehlermeldung. Gezeichnet werden sie trotzdem richtig. Eine Korrektur ist vorgeschlagen ([PR #10071](https://github.com/IfcOpenShell/IfcOpenShell/pull/10071)); das Add-on umgeht den Fehler nicht.
 
 ## Gelände: Kasten *Site*
 
@@ -85,7 +139,7 @@ Oben im Kasten *Site* schaltet man zwischen *Terrain* und *Cardboard Model* um, 
 
 ## Geplant
 
-- **Später:** Schraffur als Linien, Maßzahlen in deutscher Schreibweise, Höhenkote, Dachneigung
+- **Später:** Maßzahlen in deutscher Schreibweise, Höhenkote, Dachneigung, Schriftgröße je Maßstab, Geländelinie im Schnitt
 
 ## Lizenz
 
